@@ -1,0 +1,427 @@
+-- ums_standard_guangming.oauth_access_token definition
+
+CREATE TABLE `oauth_access_token` (
+  `token_id` varchar(255) DEFAULT NULL,
+  `token` blob,
+  `authentication_id` varchar(255) NOT NULL,
+  `user_name` varchar(255) DEFAULT NULL,
+  `client_id` varchar(255) DEFAULT NULL,
+  `authentication` blob,
+  `refresh_token` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`authentication_id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+-- ums_standard_guangming.oauth_refresh_token definition
+
+CREATE TABLE `oauth_refresh_token` (
+  `token_id` varchar(256) DEFAULT NULL,
+  `token` blob,
+  `authentication` blob
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+-- ums_standard_guangming.t_client_qywechat definition
+
+CREATE TABLE `t_client_qywechat` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `client_id` int(8) DEFAULT NULL COMMENT '客户标识id',
+  `qywx_corpid` varchar(255) DEFAULT NULL COMMENT '企业微信公司corpid',
+  `qywx_corpsecret` varchar(255) DEFAULT NULL COMMENT '企业微信公司corpsecret',
+  `qywx_agentid` varchar(255) DEFAULT NULL COMMENT '企业微信公司应用agentid',
+  `title` varchar(256) DEFAULT NULL COMMENT '移动端名称',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT;
+
+
+-- ums_standard_guangming.t_clientsign definition
+
+CREATE TABLE `t_clientsign` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+  `clientSign` varchar(32) NOT NULL COMMENT '客户标识',
+  `description` varchar(400) DEFAULT '' COMMENT '标识描述',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `clientSign` (`clientSign`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='客户标识';
+
+
+-- ums_standard_guangming.t_default_dictionary definition
+
+CREATE TABLE `t_default_dictionary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '默认字典维护表id',
+  `dict_type_id` varchar(32) NOT NULL COMMENT '字典类型ID',
+  `value` varchar(16) NOT NULL COMMENT '字典值',
+  `name` varchar(16) NOT NULL COMMENT '字典名称',
+  `sort` int(5) NOT NULL COMMENT '排序号',
+  `description` varchar(400) DEFAULT '' COMMENT '字典描述',
+  `status` int(1) DEFAULT '1' COMMENT '字典状态(1是启用，0是禁用)',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `dict_type_id_value` (`dict_type_id`,`value`) USING BTREE,
+  UNIQUE KEY `dict_type_id_name` (`dict_type_id`,`name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+-- ums_standard_guangming.t_dept definition
+
+CREATE TABLE `t_dept` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '部门id',
+  `parentId` int(11) NOT NULL COMMENT '父节点id',
+  `org_id` int(11) NOT NULL COMMENT '组织id',
+  `type` varchar(32) NOT NULL COMMENT '部门类型(1,管理员部门 2,发言人部门)',
+  `name` varchar(32) NOT NULL COMMENT '部门名称',
+  `isRealDept` int(1) DEFAULT NULL COMMENT '是否是真实部门(1代表是，0代表否)',
+  `parentDept` varchar(32) DEFAULT NULL COMMENT '上级部门名称',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `level` int(11) NOT NULL COMMENT '层级',
+  `sort` int(11) DEFAULT NULL COMMENT '排序',
+  `is_synch_external` int(1) DEFAULT '0' COMMENT '是否同步外部项目(1为同步民生云)',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `org_id` (`org_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=515 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='部门';
+
+
+-- ums_standard_guangming.t_domain_name definition
+
+CREATE TABLE `t_domain_name` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) DEFAULT NULL COMMENT '域名',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+
+
+-- ums_standard_guangming.t_login_log definition
+
+CREATE TABLE `t_login_log` (
+  `log_id` int(11) NOT NULL AUTO_INCREMENT,
+  `log_title` varchar(64) NOT NULL COMMENT '标题',
+  `log_content` varchar(255) NOT NULL COMMENT '内容',
+  `org_id` int(11) NOT NULL COMMENT '组织id',
+  `log_user` varchar(64) NOT NULL,
+  `login_name` varchar(64) NOT NULL COMMENT '登录账号',
+  `login_ip` varchar(64) NOT NULL COMMENT '登录ip',
+  `user_id` int(11) NOT NULL COMMENT '登录用户id',
+  `created_at` datetime DEFAULT NULL COMMENT '登录时间',
+  PRIMARY KEY (`log_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=224898 DEFAULT CHARSET=utf8;
+
+
+-- ums_standard_guangming.t_notification_log definition
+
+CREATE TABLE `t_notification_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `production_id` varchar(36) DEFAULT NULL COMMENT '产品ID',
+  `sender_login_name` varchar(64) DEFAULT NULL COMMENT '发送方帐号',
+  `sender_tenant_id` varchar(36) DEFAULT NULL COMMENT '发送方租户ID',
+  `sender_tenant_name` varchar(64) DEFAULT NULL COMMENT '发送方租户名称',
+  `sender_department_id` varchar(36) DEFAULT NULL COMMENT '发送方部门ID',
+  `sender_department_name` varchar(64) DEFAULT NULL COMMENT '发送方部门名称',
+  `sender_contact` varchar(64) DEFAULT NULL COMMENT '发送方地址',
+  `receiver_login_name` varchar(64) DEFAULT NULL COMMENT '接收方帐号',
+  `receiver_tenant_id` varchar(36) DEFAULT NULL COMMENT '接收方租户ID',
+  `receiver_tenant_name` varchar(64) DEFAULT NULL COMMENT '接收方租户名称',
+  `receiver_department_id` varchar(36) DEFAULT NULL COMMENT '接收方部门ID',
+  `receiver_department_name` varchar(64) DEFAULT NULL COMMENT '接收方部门名称',
+  `receiver_contact` varchar(64) DEFAULT NULL COMMENT '接收地址',
+  `notification_time` datetime DEFAULT NULL COMMENT '通知时间',
+  `notification_type` varchar(36) DEFAULT NULL COMMENT '通知类型。',
+  `notification_type_name` varchar(64) DEFAULT NULL COMMENT '通知类型名称',
+  `notification_result` varchar(36) DEFAULT NULL COMMENT '通知结果',
+  `notification_result_name` varchar(64) DEFAULT NULL COMMENT '通知结果名称',
+  `notification_detail` varchar(400) DEFAULT NULL COMMENT '通知详细 ',
+  `trace_id` varchar(36) DEFAULT NULL COMMENT '跟踪ID',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `creator` varchar(64) NOT NULL COMMENT '创建者',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='通知日志表';
+
+
+-- ums_standard_guangming.t_operation_log definition
+
+CREATE TABLE `t_operation_log` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `production_id` varchar(36) DEFAULT NULL COMMENT '产品ID',
+  `login_name` varchar(64) DEFAULT NULL COMMENT '帐号',
+  `tenant_id` varchar(36) DEFAULT NULL COMMENT '租户ID',
+  `tenant_name` varchar(64) DEFAULT NULL COMMENT '租户名称',
+  `department_id` varchar(36) DEFAULT NULL COMMENT '部门ID',
+  `department_name` varchar(64) DEFAULT NULL COMMENT '部门名称',
+  `role_id` varchar(36) DEFAULT NULL COMMENT '角色ID',
+  `role_name` varchar(64) DEFAULT NULL COMMENT '角色名称',
+  `operation_time` datetime DEFAULT NULL COMMENT '操作时间',
+  `operation_type` varchar(36) DEFAULT NULL COMMENT '操作类型',
+  `operation_type_name` varchar(64) DEFAULT NULL COMMENT '操作类型名称',
+  `operation_menu` varchar(36) DEFAULT NULL COMMENT '操作位置',
+  `operation_menu_name` varchar(64) DEFAULT NULL COMMENT '操作位置名称',
+  `operation_detail` varchar(400) DEFAULT NULL COMMENT '操作详细',
+  `trace_id` varchar(36) DEFAULT NULL COMMENT '跟踪ID',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `creator` varchar(64) NOT NULL COMMENT '创建者',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1023 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='操作日志表';
+
+
+-- ums_standard_guangming.t_org definition
+
+CREATE TABLE `t_org` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '组织id序号',
+  `clientsign` varchar(32) NOT NULL COMMENT '客户标识，作为客户数据库的后缀',
+  `province` varchar(32) NOT NULL COMMENT '地域省',
+  `province_id` varchar(8) DEFAULT '' COMMENT '省 id',
+  `city` varchar(32) NOT NULL COMMENT '地域市',
+  `city_id` varchar(8) DEFAULT '' COMMENT '市 id',
+  `district` varchar(32) NOT NULL COMMENT '所属区',
+  `district_id` varchar(8) DEFAULT '' COMMENT '区 id',
+  `customer_name` varchar(32) NOT NULL COMMENT '客户名称',
+  `customer_type` varchar(1) NOT NULL COMMENT '客户类型(1表示正式 0表示试用)',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `sys_sign` varchar(64) DEFAULT NULL COMMENT '系统标识',
+  `sign_type` varchar(32) DEFAULT NULL COMMENT '标识类型',
+  `account_sign` varchar(32) DEFAULT NULL COMMENT '账号标识',
+  `contact` varchar(100) DEFAULT NULL COMMENT '联系人',
+  `dept` varchar(32) DEFAULT NULL COMMENT '部门',
+  `phone` varchar(32) DEFAULT NULL COMMENT '联系方式',
+  `email` varchar(32) DEFAULT NULL COMMENT '电子邮箱',
+  `remark` varchar(400) DEFAULT NULL COMMENT '备注',
+  `domain_name` varchar(128) DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `customer_name` (`customer_name`) USING BTREE,
+  UNIQUE KEY `pcc` (`province`,`city`,`customer_name`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='组织';
+
+
+-- ums_standard_guangming.t_org_dictionary definition
+
+CREATE TABLE `t_org_dictionary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+  `org_id` int(11) DEFAULT NULL COMMENT '组织id',
+  `product_id` int(11) DEFAULT NULL COMMENT '产品id',
+  `dict_type` varchar(32) DEFAULT NULL COMMENT '字典类型',
+  `value` varchar(16) DEFAULT NULL COMMENT '字典值',
+  `name` varchar(20) DEFAULT NULL COMMENT '字典名称',
+  `sort` int(5) DEFAULT NULL COMMENT '排序号',
+  `description` varchar(400) DEFAULT NULL COMMENT '字典描述',
+  `status` int(1) DEFAULT NULL COMMENT '字典状态',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `dict_type` (`dict_type`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=2463 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='客户字典关系表';
+
+
+-- ums_standard_guangming.t_org_product definition
+
+CREATE TABLE `t_org_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增id',
+  `org_id` int(11) DEFAULT NULL COMMENT '组织id',
+  `product_id` int(11) DEFAULT NULL COMMENT '产品id',
+  `auth_type` varchar(16) DEFAULT '' COMMENT '授权类型',
+  `start_time` datetime DEFAULT NULL COMMENT '起始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '结束时间',
+  `auth_status` int(1) DEFAULT '1' COMMENT '授权状态(1代表启用，0代表禁用)',
+  `create_time` datetime DEFAULT NULL COMMENT '授权时间',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `org_product_id` (`org_id`,`product_id`) USING BTREE,
+  KEY `org_id` (`org_id`) USING BTREE,
+  KEY `product_id` (`product_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='组织产品表';
+
+
+-- ums_standard_guangming.t_page_set definition
+
+CREATE TABLE `t_page_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+  `org_id` int(11) NOT NULL COMMENT '组织id',
+  `sys_name` varchar(255) DEFAULT NULL COMMENT '系统logo的路径',
+  `logo` varchar(1000) DEFAULT NULL COMMENT 'logo地址',
+  `background` varchar(1000) DEFAULT NULL COMMENT '背景图片地址',
+  `page_foot` varchar(2000) DEFAULT NULL COMMENT '页尾',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='统一平台系统配置表';
+
+
+-- ums_standard_guangming.t_power definition
+
+CREATE TABLE `t_power` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `parentId` int(11) NOT NULL COMMENT '父节点id',
+  `num` varchar(10) DEFAULT NULL COMMENT '产品编号',
+  `name` varchar(30) NOT NULL COMMENT '名称',
+  `path` varchar(50) NOT NULL COMMENT '链接地址',
+  `level` int(11) NOT NULL COMMENT '层级',
+  `status` int(2) DEFAULT '1' COMMENT '菜单状态(0代表关闭，1代表启用 )',
+  `menu_sign` varchar(3) NOT NULL COMMENT '菜单标识,区分模块和功能点(m代表模块，f代表功能接口)',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `path` (`path`) USING BTREE,
+  KEY `menu_sign` (`menu_sign`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=60 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='权限表';
+
+
+-- ums_standard_guangming.t_product definition
+
+CREATE TABLE `t_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '子系统产品id',
+  `product_name` varchar(32) NOT NULL COMMENT '子系统名称',
+  `code` varchar(32) DEFAULT NULL COMMENT '产品编码',
+  `url` varchar(128) DEFAULT NULL COMMENT '子系统的url',
+  `description` varchar(400) DEFAULT '' COMMENT '描述',
+  `product_sign` varchar(32) NOT NULL COMMENT '产品标识，数据库名称的前缀',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `product_name` (`product_name`) USING BTREE,
+  UNIQUE KEY `code` (`code`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='产品表';
+
+
+-- ums_standard_guangming.t_product_dictionary definition
+
+CREATE TABLE `t_product_dictionary` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+  `product_id` int(11) NOT NULL COMMENT '产品id',
+  `dict_type` varchar(32) DEFAULT NULL COMMENT '字典类型',
+  `dict_type_id` varchar(32) DEFAULT NULL COMMENT '字典类型ID',
+  `description` varchar(400) DEFAULT '' COMMENT '字典类型描述',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `dict_type_id` (`dict_type_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='字典表';
+
+
+-- ums_standard_guangming.t_product_power definition
+
+CREATE TABLE `t_product_power` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键id',
+  `product_id` int(11) NOT NULL COMMENT '产品id',
+  `power_id` int(11) NOT NULL COMMENT '权限id',
+  `level` int(11) DEFAULT NULL COMMENT '层级',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `product_id` (`product_id`) USING BTREE,
+  KEY `power_id` (`power_id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=518 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='产品权限表';
+
+
+-- ums_standard_guangming.t_product_role_set definition
+
+CREATE TABLE `t_product_role_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增id',
+  `product_id` int(11) NOT NULL COMMENT '产品id',
+  `role_name` varchar(256) NOT NULL COMMENT '产品固定角色类型名称(每个产品角色类型是固定的,角色是可变的在t_role表)',
+  `type` int(11) NOT NULL COMMENT '产品固定角色类型id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='产品角色类型表';
+
+
+-- ums_standard_guangming.t_product_role_set_power definition
+
+CREATE TABLE `t_product_role_set_power` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增id',
+  `product_role_set_id` int(11) NOT NULL COMMENT '角色类型id',
+  `power` int(11) NOT NULL COMMENT '角色类型对应的菜单id',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=65 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='角色类型菜单表';
+
+
+-- ums_standard_guangming.t_role definition
+
+CREATE TABLE `t_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) NOT NULL COMMENT '产品id',
+  `rolename` varchar(32) NOT NULL COMMENT '角色名称',
+  `type` int(11) DEFAULT NULL COMMENT '角色类型(1：管理员；2：发言人；3：未知(调度员)；4：领导人)',
+  `code` varchar(32) NOT NULL COMMENT '角色编码',
+  `status` int(2) NOT NULL COMMENT '角色状态（0不启用，1启用）',
+  `create_time` datetime NOT NULL COMMENT '创建时间',
+  `description` varchar(400) DEFAULT '' COMMENT '角色描述',
+  `clientsign` varchar(1024) DEFAULT NULL COMMENT '客户标识',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='角色表';
+
+
+-- ums_standard_guangming.t_role_power definition
+
+CREATE TABLE `t_role_power` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键自增id',
+  `roleid` int(11) NOT NULL COMMENT '角色id',
+  `powerid` int(11) NOT NULL COMMENT '权限id',
+  PRIMARY KEY (`id`) USING BTREE,
+  KEY `powerid` (`powerid`) USING BTREE,
+  KEY `roleid` (`roleid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=1674 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='角色权限表';
+
+
+-- ums_standard_guangming.t_user definition
+
+CREATE TABLE `t_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '账号id',
+  `loginName` varchar(32) DEFAULT NULL COMMENT '登录账号',
+  `password` varchar(60) DEFAULT NULL COMMENT '密码',
+  `attempts` int(2) DEFAULT '0' COMMENT '次数',
+  `lasttime` datetime DEFAULT '1900-01-01 000000',
+  `sex` char(1) DEFAULT '' COMMENT '性别(m代表男,f代表女)',
+  `status` int(1) DEFAULT '1' COMMENT '账号状态(0 锁定  1 启用 2 过期 3 冻结)',
+  `start_time` datetime DEFAULT NULL COMMENT '使用期限_起始时间',
+  `end_time` datetime DEFAULT NULL COMMENT '使用期限_终止时间',
+  `username` varchar(32) DEFAULT '' COMMENT '用户姓名',
+  `orgid` int(11) DEFAULT NULL COMMENT '组织id',
+  `deptid` int(11) DEFAULT NULL COMMENT '部门id',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `phone` varchar(32) DEFAULT '' COMMENT '手机号码',
+  `email` varchar(32) DEFAULT '' COMMENT '电子邮箱',
+  `weixin_number` varchar(64) DEFAULT '' COMMENT '微信号',
+  `openid` varchar(64) DEFAULT '',
+  `qq_number` varchar(32) DEFAULT '' COMMENT 'QQ号',
+  `first_time` int(1) DEFAULT '1' COMMENT '第一次登录(默认为1代表是)',
+  `isweixin` int(1) DEFAULT '0' COMMENT '是否接受微信消息',
+  `issms` int(1) DEFAULT '1' COMMENT '是否接受短信提醒',
+  `isemail` int(1) DEFAULT '1' COMMENT '是否接受邮件提醒',
+  `pid` int(11) DEFAULT '0',
+  `qywx_code` varchar(256) DEFAULT NULL COMMENT '企业微信用户唯一标识',
+  `zwwx_code` varchar(256) DEFAULT NULL COMMENT '政务微信用户唯一标识',
+  `wx_code` varchar(256) DEFAULT NULL COMMENT '微信唯一标识',
+  `service_orgs` varchar(32) DEFAULT '' COMMENT '服务组织',
+  `pwd_upd_times` int(2) DEFAULT '0' COMMENT '修改次数',
+  `pwd_upd_time` datetime DEFAULT '1970-01-01 000000' COMMENT '修改时间',
+  `external_username` varchar(64) DEFAULT NULL COMMENT '匹配外部用户名',
+  `login_times` int(11) DEFAULT '0' COMMENT '登录次数',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `loginName` (`loginName`) USING BTREE,
+  UNIQUE KEY `external_username` (`external_username`),
+  KEY `orgid` (`orgid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=624 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户表';
+
+
+-- ums_standard_guangming.t_user_role definition
+
+CREATE TABLE `t_user_role` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '主键id自增',
+  `userid` int(11) NOT NULL COMMENT '用户id',
+  `roleid` int(11) NOT NULL COMMENT '角色id',
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE KEY `userid` (`userid`,`roleid`) USING BTREE,
+  KEY `roleid` (`roleid`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=789 DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户角色表';
+
+
+
+-- insert data
+
+INSERT INTO ums_standard_guangming.oauth_access_token (token_id, token, authentication_id, user_name, client_id, authentication, refresh_token) VALUES('', ?, '', '', '', ?, '');
+INSERT INTO ums_standard_guangming.oauth_refresh_token (token_id, token, authentication) VALUES('', ?, ?);
+INSERT INTO ums_standard_guangming.t_client_qywechat (client_id, qywx_corpid, qywx_corpsecret, qywx_agentid, title) VALUES(0, '', '', '', '');
+INSERT INTO ums_standard_guangming.t_clientsign (clientSign, description) VALUES('', '');
+INSERT INTO ums_standard_guangming.t_default_dictionary (dict_type_id, value, name, sort, description, status) VALUES('', '', '', 0, '', 1);
+INSERT INTO ums_standard_guangming.t_dept (parentId, org_id, `type`, name, isRealDept, parentDept, create_time, `level`, sort, is_synch_external) VALUES(0, 0, '', '', 0, '', '', 0, 0, 0);
+INSERT INTO ums_standard_guangming.t_domain_name (name) VALUES('');
+INSERT INTO ums_standard_guangming.t_login_log (log_title, log_content, org_id, log_user, login_name, login_ip, user_id, created_at) VALUES('', '', 0, '', '', '', 0, '');
+INSERT INTO ums_standard_guangming.t_notification_log (production_id, sender_login_name, sender_tenant_id, sender_tenant_name, sender_department_id, sender_department_name, sender_contact, receiver_login_name, receiver_tenant_id, receiver_tenant_name, receiver_department_id, receiver_department_name, receiver_contact, notification_time, notification_type, notification_type_name, notification_result, notification_result_name, notification_detail, trace_id, create_time, creator) VALUES('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO ums_standard_guangming.t_operation_log (production_id, login_name, tenant_id, tenant_name, department_id, department_name, role_id, role_name, operation_time, operation_type, operation_type_name, operation_menu, operation_menu_name, operation_detail, trace_id, create_time, creator) VALUES('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO ums_standard_guangming.t_org (clientsign, province, province_id, city, city_id, district, district_id, customer_name, customer_type, create_time, sys_sign, sign_type, account_sign, contact, dept, phone, email, remark, domain_name) VALUES('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+INSERT INTO ums_standard_guangming.t_org_dictionary (org_id, product_id, dict_type, value, name, sort, description, status) VALUES(0, 0, '', '', '', 0, '', 0);
+INSERT INTO ums_standard_guangming.t_org_product (org_id, product_id, auth_type, start_time, end_time, auth_status, create_time) VALUES(0, 0, '', '', '', 1, '');
+INSERT INTO ums_standard_guangming.t_page_set (org_id, sys_name, logo, background, page_foot) VALUES(0, '', '', '', '');
+INSERT INTO ums_standard_guangming.t_power (parentId, num, name, `path`, `level`, status, menu_sign) VALUES(0, '', '', '', 0, 1, '');
+INSERT INTO ums_standard_guangming.t_product (product_name, code, url, description, product_sign) VALUES('', '', '', '', '');
+INSERT INTO ums_standard_guangming.t_product_dictionary (product_id, dict_type, dict_type_id, description) VALUES(0, '', '', '');
+INSERT INTO ums_standard_guangming.t_product_power (product_id, power_id, `level`) VALUES(0, 0, 0);
+INSERT INTO ums_standard_guangming.t_product_role_set (product_id, role_name, `type`) VALUES(0, '', 0);
+INSERT INTO ums_standard_guangming.t_product_role_set_power (product_role_set_id, power) VALUES(0, 0);
+INSERT INTO ums_standard_guangming.t_role (product_id, rolename, `type`, code, status, create_time, description, clientsign) VALUES(0, '', 0, '', 0, '', '', '');
+INSERT INTO ums_standard_guangming.t_role_power (roleid, powerid) VALUES(0, 0);
+INSERT INTO ums_standard_guangming.t_user (loginName, password, attempts, lasttime, sex, status, start_time, end_time, username, orgid, deptid, create_time, phone, email, weixin_number, openid, qq_number, first_time, isweixin, issms, isemail, pid, qywx_code, zwwx_code, wx_code, service_orgs, pwd_upd_times, pwd_upd_time, external_username, login_times) VALUES('', '', 0, '1900-01-01 00:00:00', '', 1, '', '', '', 0, 0, '', '', '', '', '', '', 1, 0, 1, 1, 0, '', '', '', '', 0, '1970-01-01 00:00:00', '', 0);
+INSERT INTO ums_standard_guangming.t_user_role (userid, roleid) VALUES(0, 0);
+
